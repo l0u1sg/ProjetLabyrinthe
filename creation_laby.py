@@ -29,7 +29,7 @@ def creer_labyrinthe(nb_lignes, nb_colonnes, degenerer=30):
     return G
 
     
-    
+```
 if __name__ == "__main__":
     # Lance le test de la fonction creer_labyrinthe()
     Labyrinthe = creer_labyrinthe(5, 6, 30)
@@ -38,3 +38,4 @@ if __name__ == "__main__":
     nx.draw(Labyrinthe, with_labels=True)
     plt.show()
     print(m)
+```
