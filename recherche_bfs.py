@@ -63,7 +63,6 @@ def chercher_bfs(laby:nx.Graph, source:int = None, destination:int = None)->list
         
     #return nx.shortest_path(laby, source, destination)
 
-'''
 if __name__ == "__main__":
     # Création du labyrinthe de test
     aretes = [(0, 1), (0, 4), (1, 0), (1, 5), (2, 6), (3, 7), (4, 0), (4, 5), (5, 1) , \
@@ -81,4 +80,3 @@ if __name__ == "__main__":
     #afficher_labyrinthe(Labyrinthe, colonnes, lignes)
     chemin_bfs =chercher_bfs(Labyrinthe, 0, 5)
     print(chemin_bfs)
-'''
