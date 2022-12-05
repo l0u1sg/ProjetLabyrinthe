@@ -53,6 +53,8 @@ def chercher_bfs(laby:nx.Graph, source:int = None, destination:int = None)->list
         #print(tmp,end = " ")
         if tmp not in sommet_visite:
             sommet_visite.append(tmp)
+        if tmp == destination:
+            break
         for voisin in laby.neighbors(tmp):
             if voisin not in sommet_visite and not f.present(tmp):
                 f.enfiler(voisin)
