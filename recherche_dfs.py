@@ -15,6 +15,35 @@ class Pile:
     def vide(self):
         return len(self.p) == 0
 
+def recursive_dfs(graph, node,destination):
+    def rec(graph, node,destination, visited=None):
+
+        if visited is None:
+            visited = []
+
+        if node not in visited :
+            visited.append(node)
+
+        if node == destination:
+            return visited
+
+        unvisited = [n for n in graph[node] if n not in visited]
+
+        for node in unvisited:
+            rec(graph, node, destination, visited)
+
+        return visited
+    solution_nodes = rec(graph, node,destination)
+
+    solution_edges = []
+
+    for i in range(len(solution_nodes)-1):
+        solution_edges.append((solution_nodes[i],solution_nodes[i+1]))
+            
+
+    return solution_edges
+
+    
 def chercher_dfs(laby:nx.Graph, source:int = None, destination:int = None)->list:
     """ Cherche le chemin le plus court entre les sommets source et destination
         selon le parcours en profondeur.
@@ -32,19 +61,28 @@ def chercher_dfs(laby:nx.Graph, source:int = None, destination:int = None)->list
     node = source
     
     visited = []
+    solution_nodes = []
+    solution_edges = []
     p = Pile()
     p.empile(node)
-
-    while not p.vide() and node != destination:
+    
+    while not p.vide():
         node = p.depile()
+        
         if node not in visited:
             visited.append(node)
             unvisited = [n for n in laby[node] if n not in visited]
             for i in unvisited:
                 p.empile(i)
+        if node == destination:
+            solution_nodes = visited.copy()
+
+
+    for i in range(len(solution_nodes)-1):
+        solution_edges.append((solution_nodes[i],solution_nodes[i+1]))
             
 
-    return visited
+    return solution_edges
 
 if __name__ == "__main__":
     # Création du labyrinthe de test
@@ -58,8 +96,7 @@ if __name__ == "__main__":
     Labyrinthe = nx.Graph()
     Labyrinthe.add_nodes_from(noeuds)
     Labyrinthe.add_edges_from(aretes)
-    nx.draw(Labyrinthe)
     # Lance le test de la fonction afficher_labyrinthe()
     #afficher_labyrinthe(Labyrinthe, colonnes, lignes)
     chemin_dfs =chercher_dfs(Labyrinthe)
-    print(chemin_dfs)
+    print(chemin_dfs,recursive_dfs(Labyrinthe,noeuds[0],noeuds[-1]))
