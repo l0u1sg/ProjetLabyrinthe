@@ -1,7 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-
-#importation des bibliothèques
+# importation des bibliothèques
 import networkx as nx
 import matplotlib.pyplot as plt
 import random
@@ -15,21 +14,29 @@ coefficient de dégénération correspond au pourcentage d’arêtes qui seront 
 Sortie : Graphe NetworkX (Représentation du labyrinthe)
 Postcondition : Le labyrinthe créé doit être connexe. Sinon, la recherche de sortie va planter!
 """
+
+
 def creer_labyrinthe(nb_lignes, nb_colonnes, degenerer=30):
-    #Création du graphe
+    """
+    Fonction : creer_labyrinthe()
+    @param nb_lignes : nombre de lignes
+    @param nb_colonnes : nombre de colonnes
+    @param degenerer : coefficient de dégénération
+    @return : Graphe NetworkX (Représentation du labyrinthe)
+    """
+    # Création du graphe
     G = nx.grid_2d_graph(nb_lignes, nb_colonnes)
-    #Génération des arêtes
-    for (u,v) in G.edges():
-        G[u][v]['weight'] = random.randint(1,10)
-    #Dégénération
+    # Génération des arêtes
+    for (u, v) in G.edges():
+        G[u][v]['weight'] = random.randint(1, 10)
+    # Dégénération
     if degenerer > 0:
-        for (u,v) in G.edges():
-            if random.randint(1,100) <= degenerer:
-                G.remove_edge(u,v)
+        for (u, v) in G.edges():
+            if random.randint(1, 100) <= degenerer:
+                G.remove_edge(u, v)
     return G
 
-    
-```
+
 if __name__ == "__main__":
     # Lance le test de la fonction creer_labyrinthe()
     Labyrinthe = creer_labyrinthe(5, 6, 30)
@@ -38,4 +45,3 @@ if __name__ == "__main__":
     nx.draw(Labyrinthe, with_labels=True)
     plt.show()
     print(m)
-```
