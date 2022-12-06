@@ -14,27 +14,35 @@ class Pile:
         return self.p.pop()
     def vide(self):
         return len(self.p) == 0
-        
-def recursive_dfs(graph, node,destination, visited=None):
 
-    if node == destination:
+def recursive_dfs(graph, node,destination):
+    def rec(graph, node,destination, visited=None):
+
+        if visited is None:
+            visited = []
+
+        if node not in visited :
+            visited.append(node)
+
+        if node == destination:
+            return visited
+
+        unvisited = [n for n in graph[node] if n not in visited]
+
+        for node in unvisited:
+            rec(graph, node, destination, visited)
+
         return visited
+    solution_nodes = rec(graph, node,destination)
 
+    solution_edges = []
 
-    if visited is None:
-        visited = []
+    for i in range(len(solution_nodes)-1):
+        solution_edges.append((solution_nodes[i],solution_nodes[i+1]))
+            
 
-    if node not in visited :
-        visited.append(node)
+    return solution_edges
 
-    
-
-    unvisited = [n for n in graph[node] if n not in visited]
-
-    for node in unvisited:
-        recursive_dfs(graph, node, destination, visited)
-
-    return visited
     
 def chercher_dfs(laby:nx.Graph, source:int = None, destination:int = None)->list:
     """ Cherche le chemin le plus court entre les sommets source et destination
@@ -91,4 +99,4 @@ if __name__ == "__main__":
     # Lance le test de la fonction afficher_labyrinthe()
     #afficher_labyrinthe(Labyrinthe, colonnes, lignes)
     chemin_dfs =chercher_dfs(Labyrinthe)
-    print(chemin_dfs)
+    print(chemin_dfs,recursive_dfs(Labyrinthe,noeuds[0],noeuds[-1]))
