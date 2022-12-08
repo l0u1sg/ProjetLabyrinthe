@@ -1,8 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-#VERSION SANS LES AMELIORATIONS
-
 import networkx as nx
 
 class Pile:
@@ -14,6 +12,30 @@ class Pile:
         return self.p.pop()
     def vide(self):
         return len(self.p) == 0
+
+def simplify_nodes(nodes):
+    simplified = []
+    find = False
+    tmp_j = 0
+    for i in range(len(nodes)-1):
+        if find:
+            if i == tmp_j:
+                find = False
+        else:
+            simplified.append(nodes[i])
+            for j in range(i+1,len(nodes)):
+                if nodes[i]==nodes[j]:
+                    tmp_j = j
+                    find = True
+    if simplified[-1] != nodes[-1]:
+        simplified.append(nodes[-1])
+    return simplified
+
+def convert_endges(nodes):
+    edges = []
+    for i in range(len(nodes)-1):
+        edges.append((nodes[i],nodes[i+1]))
+    return edges
 
 def recursive_dfs(graph, node,destination):
     def rec(graph, node,destination, visited=None):
@@ -35,11 +57,7 @@ def recursive_dfs(graph, node,destination):
         return visited
     solution_nodes = rec(graph, node,destination)
 
-    solution_edges = []
-
-    for i in range(len(solution_nodes)-1):
-        solution_edges.append((solution_nodes[i],solution_nodes[i+1]))
-            
+    solution_edges = convert_endges(simplify_nodes(solution_nodes)) 
 
     return solution_edges
 
@@ -62,7 +80,7 @@ def chercher_dfs(laby:nx.Graph, source:int = None, destination:int = None)->list
     
     visited = []
     solution_nodes = []
-    solution_edges = []
+    
     p = Pile()
     p.empile(node)
     
@@ -77,10 +95,7 @@ def chercher_dfs(laby:nx.Graph, source:int = None, destination:int = None)->list
         if node == destination:
             solution_nodes = visited.copy()
 
-
-    for i in range(len(solution_nodes)-1):
-        solution_edges.append((solution_nodes[i],solution_nodes[i+1]))
-            
+    solution_edges = convert_endges(simplify_nodes(solution_nodes))
 
     return solution_edges
 
@@ -97,6 +112,6 @@ if __name__ == "__main__":
     Labyrinthe.add_nodes_from(noeuds)
     Labyrinthe.add_edges_from(aretes)
     # Lance le test de la fonction afficher_labyrinthe()
-    #afficher_labyrinthe(Labyrinthe, colonnes, lignes)
+    # afficher_labyrinthe(Labyrinthe, colonnes, lignes)
     chemin_dfs =chercher_dfs(Labyrinthe)
     print(chemin_dfs,recursive_dfs(Labyrinthe,noeuds[0],noeuds[-1]))
